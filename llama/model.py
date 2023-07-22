@@ -304,6 +304,7 @@ class Transformer(nn.Module):
                 (1, 1, seqlen, seqlen), float("-inf"), device=tokens.device
             )
             mask = torch.triu(mask, diagonal=start_pos + 1).type_as(h)
+            mask = mask.masked_fill(torch.isnan(mask), 0.0)
 
         for layer in self.layers:
             h = layer(h, start_pos, freqs_cis, mask)
